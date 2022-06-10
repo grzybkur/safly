@@ -1,0 +1,152 @@
+{% extends 'apps/base.html' %}
+
+
+{% block content %}
+<section class ="bg-body p-5 p-lg-0 pt-lg-5 text-center text-sm-start">
+
+    <section class="p-5">
+
+<div class="container">
+    <div class="row text-center g-4">
+      {% for data in first_airline %}
+      <div class="col-md">
+        <div class="card bg-light text-dark">
+            <h3 class="mb-sm-4">{{data.dfop_carrier}}</h3>
+      <div class="card-body pt-0 px-0">
+        <div class="d-flex flex-row justify-content-between mb-0 px-3">
+          <small class=" mt-1">Amount of flights</small>
+          <h6>{{data.amount_of_flights}}</h6>
+        </div>
+        <hr class="mt-2 mx-3">
+        <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Amount of delays</small>
+            <h6>{{data.amount_of_delays}}</h6>
+          </div>
+          <hr class="mt-2 mx-3">
+        <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Number of accidents</small>
+            <h6>{{data.number_of_accidents}}</h6>
+        </div>
+          <hr class="mt-2 mx-3">
+        <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Mean of delay</small>
+            <h6>{{data.mean_of_delay}}</h6>
+        </div>
+          <hr class="mt-2 mx-3"> 
+          <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Chance of delay</small>
+            <h6>{{data.chance_of_delay}}</h6>
+        </div>
+          <hr class="mt-2 mx-3">
+          <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Number of accidents</small>
+            <h6>{{data.chance_of_accident}}</h6>
+        </div>
+          <hr class="mt-2 mx-3">       
+      </div>
+    </div>
+      </div>
+      {%endfor%}
+      {% for data in second_airline %}
+      <div class="col-md">
+        <div class="card bg-dark text-white">
+            <h3 class="mb-sm-4">{{data.dfop_carrier}}</h3>
+      <div class="card-body pt-0 px-0">
+        <div class="d-flex flex-row justify-content-between mb-0 px-3">
+          <small class="mt-1">Amount of flights</small>
+          <h6>{{data.amount_of_flights}}</h6>
+        </div>
+        <hr class="mt-2 mx-3">
+        <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Amount of delays</small>
+            <h6>{{data.amount_of_delays}}</h6>
+          </div>
+          <hr class="mt-2 mx-3">
+        <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Number of accidents</small>
+            <h6>{{data.number_of_accidents}}</h6>
+        </div>
+          <hr class="mt-2 mx-3">
+        <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Mean of delay</small>
+            <h6>{{data.mean_of_delay}}</h6>
+        </div>
+          <hr class="mt-2 mx-3"> 
+          <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Chance of delay</small>
+            <h6>{{data.chance_of_delay}}</h6>
+        </div>
+          <hr class="mt-2 mx-3">
+          <div class="d-flex flex-row justify-content-between mb-0 px-3">
+            <small class=" mt-1">Number of accidents</small>
+            <h6>{{data.chance_of_accident}}</h6>
+        </div>
+          <hr class="mt-2 mx-3">       
+      </div>
+    </div>
+      </div>
+      {%endfor%}
+    
+    </div>
+  </div>
+  <section class="p-5">
+    <div class="container">
+        <div class="row text-center g-4">
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        {% for data in first_airline %}
+        <div class="col-md">
+        <div class="radio">
+            <label>
+                <input type="radio" name="poll" value="option1" required>
+                {{data.dfop_carrier}}
+            </label> &nbsp;
+        </div>
+        {%endfor%}
+        {% for data in second_airline %}
+        <div class="col-md">
+            <label>
+                <input type="radio" name="poll" value="option2">
+                {{data.dfop_carrier}}
+            </label> &nbsp;
+        </div>
+        {%endfor%}
+        </div>
+    </div>
+</div>
+  {% for data in first_airline %}
+                <input type="hidden" name="first_airline_dfop_carrier" value={{data.dfop_carrier}} />
+                <input type="hidden" name="first_airline_amount_of_flights" value={{data.amount_of_flights}} />
+                <input type="hidden" name="first_airline_amount_of_delays" value={{data.amount_of_delays}} />
+                <input type="hidden" name="first_airline_number_of_accidents" value={{data.number_of_accidents}} />
+                <input type="hidden" name="first_airline_mean_of_delay" value={{data.mean_of_delay}} />
+                <input type="hidden" name="first_airline_chance_of_delay" value={{data.chance_of_delay}} />
+                <input type="hidden" name="first_airline_chance_of_accident" value={{data.chance_of_accident}} />
+            {%endfor%}
+            {% for data in second_airline %}
+                <input type="hidden" name="second_airline_dfop_carrier" value={{data.dfop_carrier}} />
+                <input type="hidden" name="second_airline_amount_of_flights" value={{data.amount_of_flights}} />
+                <input type="hidden" name="second_airline_amount_of_delays" value={{data.amount_of_delays}} />
+                <input type="hidden" name="second_airline_number_of_accidents" value={{data.number_of_accidents}} />
+                <input type="hidden" name="second_airline_mean_of_delay" value={{data.mean_of_delay}} />
+                <input type="hidden" name="second_airline_chance_of_delay" value={{data.chance_of_delay}} />
+                <input type="hidden" name="second_airline_chance_of_accident" value={{data.chance_of_accident}} />
+            {%endfor%}
+            <hr />
+            <div class="h-100 d-flex align-items-center justify-content-center">
+            <button type="submit" class="btn btn-dark text-white">
+                Submit
+            </button>
+        </div>
+        </form>
+    </div>
+  </section>
+    </div>
+</section>
+</section>
+    
+{% endblock %}
+
+
+

@@ -1,0 +1,25 @@
+
+<form method=POST action="{% url 'search-airline' %}">
+    <div class="row">
+    {% csrf_token %}
+    <div class="col">
+    <input class="form-control mr-sm-2"  type="search" list="namelist" placeholder="Search airline" aria-label="Search" name="searched_airplane">
+    </div>
+    <div class="col">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+    </div>
+    <div class="col">
+    <input class="form-control mr-sm-2"  type="search" list="namelist" placeholder="Search airline" aria-label="Search" name="searched_airplane_second">
+    </div>
+    <datalist id = "namelist">
+        {% for result in showname %}
+            <option value="{{ result.dfop_carrier }}"></option>
+        {% endfor %}
+    </datalist>
+</div>
+</form>
+
+
+
+
+

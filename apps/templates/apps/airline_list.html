@@ -1,0 +1,232 @@
+{% extends 'apps/base.html' %}
+
+
+{% block content %}
+<section class ="bg-body p-5 p-lg-0 pt-lg-5 text-center text-sm-start">
+
+  <section class="p-5">
+    <div class="container">
+      <div class="row text-center g-4">
+        <div class="col-md">
+          {% if model_result == 1 %}
+              <h3 class="text-primary">SaFly's AI recommends this option</h3>
+              {% endif %}
+        </div>
+        <div class="col-md">
+          {% if model_result == 2 %}
+              <h3 class="text-primary">SaFly's AI recommends this option</h3>
+              {% endif %}
+        </div>
+      </div>
+    </div>
+<div class="container">
+  <div class="row text-center g-4">
+    
+        <div id ="outside-border" class="col-sm-6 p-3 bg-body rounded shadow-sm">
+            <div class="px-3">
+                {% for data in first_airline %}
+                <div class="col-md">
+                  <div class="card bg-light text-dark">
+                      <h3 class="mb-sm-4">{{data.dfop_carrier}}</h3>
+                <div class="card-body pt-0 px-0">
+                  <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                    <small class=" mt-1">Amount of flights</small>
+                    <h6>{{data.amount_of_flights}}</h6>
+                  </div>
+                  <hr class="mt-2 mx-3">
+                  <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                      <small class=" mt-1">Amount of delays</small>
+                      <h6>{{data.amount_of_delays}}</h6>
+                    </div>
+                    <hr class="mt-2 mx-3">
+                  <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                      <small class=" mt-1">Number of accidents</small>
+                      <h6>{{data.number_of_accidents}}</h6>
+                  </div>
+                    <hr class="mt-2 mx-3">
+                  <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                      <small class=" mt-1">Mean of delay</small>
+                      <h6>{{data.mean_of_delay}}</h6>
+                  </div>
+                    <hr class="mt-2 mx-3"> 
+                    <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                      <small class=" mt-1">Chance of delay</small>
+                      <h6>{{data.chance_of_delay}}</h6>
+                  </div>
+                    <hr class="mt-2 mx-3">
+                    <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                      <small class=" mt-1">Number of accidents</small>
+                      <h6>{{data.chance_of_accident}}</h6>
+                  </div>
+                    <hr class="mt-2 mx-3">       
+                </div>
+              </div>
+                </div>
+                {%endfor%}
+                <canvas id="leftChart"> </canvas>
+            </div>
+        </div>
+
+        <div id ="outside-border" class="col-sm-6 p-3 bg-body rounded shadow-sm">
+            {% for data in second_airline %}        
+            <div class="col-md">
+              <div class="card bg-dark text-light">
+                  <h3 class="mb-sm-4">{{data.dfop_carrier}}</h3>
+            <div class="card-body pt-0 px-0">
+              <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                <small class=" mt-1">Amount of flights</small>
+                <h6>{{data.amount_of_flights}}</h6>
+              </div>
+              <hr class="mt-2 mx-3">
+              <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                  <small class=" mt-1">Amount of delays</small>
+                  <h6>{{data.amount_of_delays}}</h6>
+                </div>
+                <hr class="mt-2 mx-3">
+              <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                  <small class=" mt-1">Number of accidents</small>
+                  <h6>{{data.number_of_accidents}}</h6>
+              </div>
+                <hr class="mt-2 mx-3">
+              <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                  <small class=" mt-1">Mean of delay</small>
+                  <h6>{{data.mean_of_delay}}</h6>
+              </div>
+                <hr class="mt-2 mx-3"> 
+                <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                  <small class=" mt-1">Chance of delay</small>
+                  <h6>{{data.chance_of_delay}}</h6>
+              </div>
+                <hr class="mt-2 mx-3">
+                <div class="d-flex flex-row justify-content-between mb-0 px-3">
+                  <small class=" mt-1">Number of accidents</small>
+                  <h6>{{data.chance_of_accident}}</h6>
+              </div>
+                <hr class="mt-2 mx-3">       
+            </div>
+          </div>
+            </div>
+        {%endfor%}
+        <canvas id="rightChart"> </canvas>
+        </div>
+        <div>
+          <!--<h3>{{model_choice}}</h3>-->
+        </div>
+  </div>
+</div>
+</section>
+</section>
+
+
+
+{% comment %} {%for airplane in airplanes%} {% endcomment %}
+    
+{{first_plot|json_script:"1st_mydata" }}
+{{second_plot|json_script:"2nd_mydata" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+<script>
+
+var first_mydata = JSON.parse(document.getElementById('1st_mydata').textContent);
+var second_mydata = JSON.parse(document.getElementById('2nd_mydata').textContent);
+
+const totalDuration = 10000;
+const delayBetweenPoints = totalDuration / first_mydata.length;
+const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
+const animation = {
+  x: {
+    type: 'number',
+    easing: 'linear',
+    duration: delayBetweenPoints,
+    from: NaN, // the point is initially skipped
+    delay(ctx) {
+      if (ctx.type !== 'data' || ctx.xStarted) {
+        return 0;
+      }
+      ctx.xStarted = true;
+      return ctx.index * delayBetweenPoints;
+    }
+  },
+  y: {
+    type: 'number',
+    easing: 'linear',
+    duration: delayBetweenPoints,
+    from: previousY,
+    delay(ctx) {
+      if (ctx.type !== 'data' || ctx.yStarted) {
+        return 0;
+      }
+      ctx.yStarted = true;
+      return ctx.index * delayBetweenPoints;
+    }
+  }
+};
+
+
+const config1 = {
+  type: 'line',
+  data: {
+    datasets: [{
+      borderColor: 'rgb(255, 99, 132)',
+      borderWidth: 1,
+      radius: 0,
+      data: first_mydata,
+    }]
+  },
+  options: {
+    animation,
+    interaction: {
+      intersect: false
+    },
+    plugins: {
+      legend: false
+    },
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          minUnit: 'month'
+        }
+      }
+    }
+  }
+};
+
+const config2 = {
+    type: 'line',
+    data: {
+      datasets: [{
+        borderColor: 'rgb(153, 102, 255)',
+        borderWidth: 1,
+        radius: 0,
+        data: second_mydata,
+      }]
+    },
+    options: {
+      animation,
+      interaction: {
+        intersect: false
+      },
+      plugins: {
+        legend: false
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            minUnit: 'month'
+          }
+        }
+      }
+    }
+  };
+
+const leftChart = new Chart(document.getElementById('leftChart'), config1);
+const rightChart = new Chart(document.getElementById('rightChart'), config2);
+</script>
+{% endblock %}
+
+
+

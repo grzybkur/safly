@@ -1,0 +1,35 @@
+{% comment %} Nagłówek strony z logo + search_barem {% endcomment %}
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #86bbd8;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="{% static 'images/logo2.png' %}" width="60" height="60" class="d-inline-block align-top" alt="SaFly">
+      </a>
+      <button type="button">
+        <a href="{% url 'airline_poll' %}">Poll</a>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+        
+        <form method=POST action="{% url 'search-airline' %}">
+          <div class="row">
+          {% csrf_token %}
+          <div class="col">
+          <input class="form-control mr-sm-2"  type="search" list="namelist" placeholder="Search airline" aria-label="Search" name="searched_airplane">
+          </div>
+          <div class="col">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+          </div>
+          <div class="col">
+          <input class="form-control mr-sm-2"  type="search" list="namelist" placeholder="Search airline" aria-label="Search>
+          </div>
+          <datalist id = "namelist">
+              {% for result in showname %}
+                  <option value="{{ result.dfop_carrier }}"></option>
+              {% endfor %}
+          </datalist>
+      </div>
+      </form>
+      </div>
+    </div>
+  </nav>

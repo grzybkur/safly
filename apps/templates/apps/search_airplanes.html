@@ -1,0 +1,44 @@
+{% load static %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-dark text-white navbar-dark gradient-custom">
+    <!-- Container wrapper -->
+    <div class="container-fluid ">
+      <!-- Navbar brand -->
+      <a class="navbar-brand text-primary" href="./">
+       <!-- <img src="{% static 'images/logo2.png' %}" width="60" height="60" class="d-inline-block align-top" alt="SaFly"> -->
+       SaFly
+      </a>
+      <!-- Toggle button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Left links -->
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item text-center">
+            <a href="{% url 'airline_poll' %}" class="nav-link text-white">Poll</a>
+          </li>
+        <!-- Search form -->
+        <form class="d-flex input-group w-auto ms-lg-3 my-3 my-lg-0 offset-2" method=POST action="{% url 'search-airline' %}">
+          {% csrf_token %}
+          <input type="search" list="namelist" placeholder="Search airline" aria-label="Search" name="searched_airplane">
+          <input type="search" list="namelist" placeholder="Search airline" aria-label="Search" name="searched_airplane_second">
+          <button class="btn btn-outline-white text-white" type="submit" data-mdb-ripple-color="dark">
+            Search
+          </button>
+          <datalist id = "namelist">
+            {% for result in showname %}
+                <option value="{{ result.dfop_carrier }}"></option>
+            {% endfor %}
+        </datalist>
+        </form>
+      </div>
+      <!-- Collapsible wrapper -->
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
